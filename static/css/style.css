@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
+:root {
+  --font-family: 'Source Sans Pro', sans-serif;
+  --bg-color: #ffffff;
+  --sidebar-bg: #f0f2f6;
+  --text-color: #262730;
+  --text-muted: #808495;
+  --primary-color: #ff4b4b;
+  --primary-hover: #ff3333;
+  --border-color: #d6d6d8;
+  /* Slightly darker for better visibility */
+  --input-bg: #ffffff;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  /* App-like feel */
+  display: flex;
+}
+
+/* App Layout */
+.st-app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Sidebar */
+.st-sidebar {
+  width: 336px;
+  /* Standard Streamlit sidebar width */
+  background-color: var(--sidebar-bg);
+  padding: 2rem 1rem;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-header h2 {
+  font-size: 1.25rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.st-block {
+  margin-bottom: 2rem;
+}
+
+.st-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.st-vertical-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Main Content */
+.st-main {
+  flex: 1;
+  padding: 3rem 5rem;
+  /* Spacious padding like Streamlit */
+  overflow-y: auto;
+  background-color: var(--bg-color);
+}
+
+@media (max-width: 768px) {
+  .st-main {
+    padding: 1.5rem;
+  }
+
+  .st-sidebar {
+    display: none;
+    /* Hide sidebar on small screens for now or create toggle */
+  }
+}
+
+.header-title h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.counter-badge {
+  display: inline-block;
+  background-color: #ffebeb;
+  /* Light red bg */
+  color: var(--primary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  border: 1px solid #ffc7c7;
+}
+
+/* Components: Buttons */
+.st-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-weight: 400;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+  line-height: 1.6;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Secondary Button (Default) */
+.st-btn-secondary {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid rgba(49, 51, 63, 0.2);
+}
+
+.st-btn-secondary:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Primary Button */
+.st-btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: 1px solid var(--primary-color);
+}
+
+.st-btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.st-btn-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Inputs & Textareas */
+.st-input,
+.st-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(49, 51, 63, 0.2);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.st-input:focus,
+.st-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.st-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Containers / Expanders Style */
+.st-container {
+  margin-bottom: 2rem;
+}
+
+.st-container h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  /* Streamlit subheaders usually don't have lines, but to separate sections clearly: */
+  border-bottom: 1px solid rgba(49, 51, 63, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+/* Checklist Items */
+.item {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.item label {
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+/* Custom Checkbox mimicking Streamlit */
+.item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1px solid #808495;
+  border-radius: 2px;
+  background-color: white;
+  cursor: pointer;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+  display: grid;
+  place-content: center;
+}
+
+.item input[type="checkbox"]:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.item input[type="checkbox"]:checked::before {
+  content: "";
+  width: 0.65em;
+  height: 0.45em;
+  transform: translateY(-5%) rotate(-45deg);
+  border: 2px solid white;
+  border-top: none;
+  border-right: none;
+}
+
+.item.checked label {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.small {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Modal and Footer */
+footer {
+  margin-top: 4rem;
+  border-top: 1px solid rgba(49, 51, 63, 0.1);
+  padding-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+#markdownOutput {
+  background: #f0f2f6;
+  border: none;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10000;
+}
+
+.toast {
+  background: #262730;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.toast.success {
+  background: #10b981;
+}
+
+.toast.error {
+  background: #ff4b4b;
+}

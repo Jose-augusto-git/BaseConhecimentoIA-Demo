@@ -1,0 +1,47 @@
+/* ==================== SIDEBAR USER PROFILE ==================== */
+
+.sidebar-profile {
+    margin-top: 20px;
+    background: transparent;
+    flex-direction: column;
+    /* Stack Avatar above Info */
+    gap: 10px;
+}
+
+.sidebar-profile .header-avatar-img {
+    width: 60px;
+    /* Slightly larger avatar in sidebar */
+    height: 60px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-profile .user-info-box {
+    width: 100%;
+    min-width: 0;
+    /* Permite encolher */
+    flex-direction: column;
+    /* Stack details and logout button */
+    padding: 12px;
+    gap: 10px;
+    background: rgba(10, 10, 10, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-profile .user-details {
+    align-items: center;
+}
+
+.sidebar-profile .btn-logout {
+    width: 100%;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.sidebar-profile .btn-logout:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: var(--danger);
+}

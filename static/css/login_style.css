@@ -1,0 +1,221 @@
+:root {
+    --bg-dark: #0f1115;
+    --bg-darker: #050608;
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --text-white: #ffffff;
+    --text-gray: #9ca3af;
+    --border-color: #1f2937;
+    --input-bg: #1f2937;
+    --font-main: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.split-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- Lado Esquerdo (Vídeo) --- */
+.split-left {
+    flex: 1.2;
+    position: relative;
+    overflow: hidden;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.split-left video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 1;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(5, 6, 8, 0.9) 100%);
+    z-index: 2;
+}
+
+.brand-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 2rem;
+}
+
+.brand-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -2px;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.brand-content p {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* --- Lado Direito (Login) --- */
+.split-right {
+    flex: 0.8;
+    background-color: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    z-index: 4;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.login-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.login-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-white);
+}
+
+.login-header p {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.matrix-input {
+    font-family: 'Courier New', monospace !important;
+    color: #00ff00 !important;
+    /* Matrix Green */
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 1rem;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    margin-top: 1rem;
+    color: #ef4444;
+    text-align: center;
+    font-size: 0.9rem;
+    min-height: 20px;
+}
+
+.login-footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--text-gray);
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .split-container {
+        flex-direction: column;
+    }
+
+    .split-left {
+        flex: 0.4;
+        min-height: 200px;
+    }
+
+    .brand-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .split-right {
+        flex: 1;
+        border-radius: 30px 30px 0 0;
+        margin-top: -30px;
+    }
+}

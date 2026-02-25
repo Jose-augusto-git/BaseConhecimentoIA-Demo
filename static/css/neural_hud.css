@@ -1,0 +1,156 @@
+/* ==================== NEURAL NETWORK VIEW ==================== */
+
+.badge-beta {
+    font-size: 0.6em;
+    background: transparent;
+    border: 1px dotted #a3ff00;
+    color: #a3ff00;
+    padding: 2px 6px;
+    border-radius: 0;
+    vertical-align: middle;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.neural-wrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 200px);
+    background-color: #020202;
+    background-image:
+        linear-gradient(rgba(163, 255, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(163, 255, 0, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-radius: 0;
+    border: 1px solid rgba(163, 255, 0, 0.3);
+    overflow: hidden;
+}
+
+.network-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Neural HUD - Brutalism Dashboard */
+.neural-hud {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(2, 2, 2, 0.85);
+    backdrop-filter: blur(4px);
+    border: 1px dashed rgba(163, 255, 0, 0.5);
+    border-radius: 0;
+    padding: 1.5rem;
+    z-index: 10;
+    font-family: 'Courier New', Courier, monospace;
+    pointer-events: none;
+    box-shadow: 4px 4px 0 rgba(163, 255, 0, 0.1);
+}
+
+/* Pseudo terminal header */
+.neural-hud::before {
+    content: '[ SYS_MONITOR ]';
+    position: absolute;
+    top: -10px;
+    left: -1px;
+    background: #020202;
+    color: #a3ff00;
+    font-size: 0.75rem;
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.hud-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dotted rgba(163, 255, 0, 0.3);
+}
+
+.hud-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.hud-section h4 {
+    font-size: 0.8rem;
+    color: #a3ff00;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hud-section h4::before {
+    content: '>';
+    color: #a3ff00;
+    font-weight: bold;
+}
+
+.hud-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.hud-label {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.hud-value {
+    color: #fff;
+    font-weight: bold;
+}
+
+.hud-value.active {
+    color: #a3ff00;
+    text-shadow: 0 0 5px rgba(163, 255, 0, 0.5);
+}
+
+/* Status Indicator (Blinking Square LED) */
+.hud-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #a3ff00;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.hud-led {
+    width: 10px;
+    height: 10px;
+    background: #a3ff00;
+    border-radius: 0;
+    box-shadow: 0 0 5px #a3ff00;
+}
+
+.hud-led.online {
+    animation: blink-brutalist 1.5s infinite;
+}
+
+@keyframes blink-brutalist {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0.2;
+    }
+}

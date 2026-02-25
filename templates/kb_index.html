@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Conhecimento IA - Suporte Interno</title>
+    <meta name="description" content="Base de conhecimento interna com IA para equipe de suporte">
+    <link rel="stylesheet" href="static/css/kb_style.css?v=36">
+    <link rel="stylesheet" href="static/css/mobile_sidebar.css?v=35">
+    <link rel="stylesheet" href="static/css/header_stats.css?v=6">
+    <link rel="stylesheet" href="static/css/confirm_modal.css?v=6">
+    <link rel="stylesheet" href="static/css/neural_hud.css?v=1">
+    <link rel="stylesheet" href="static/css/analytics.css?v=1">
+    <link rel="icon" href="static/img/logo-aba.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/dist/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+
+<body>
+    <!-- Matrix Intro Overlay -->
+    <canvas id="matrixIntroCanvas"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; background:black;"></canvas>
+    <script>
+        // Safety timeout: Remove loading screen if it gets stuck (e.g. JS error)
+        setTimeout(() => {
+            const canvas = document.getElementById('matrixIntroCanvas');
+            if (canvas && canvas.style.display !== 'none') {
+                console.warn("Forcing loading screen removal");
+                canvas.style.opacity = '0';
+                setTimeout(() => canvas.style.display = 'none', 500);
+            }
+        }, 5000);
+    </script>
+
+    <!-- Mobile Toggle Button -->
+    <button id="sidebarToggle" class="mobile-menu-toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Overlay for closing sidebar -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="mainSidebar">
+            <div class="sidebar-header">
+                <button id="desktopSidebarToggle" class="desktop-sidebar-toggle" title="Recolher Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hamburger-icon">
+                        <line class="line-top" x1="3" y1="6" x2="21" y2="6"></line>
+                        <line class="line-middle" x1="3" y1="12" x2="21" y2="12"></line>
+                        <line class="line-bottom" x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="logo">
+                    <div class="logo-video-container">
+                        <video autoplay loop muted playsinline class="logo-video">
+                            <source src="static/img/logo1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+
+                </div>
+                <p class="subtitle">Inteligência de Dados Própria</p>
+            </div>
+
+            <nav class="nav-menu">
+                <!-- Update Notification (Hidden by default) -->
+                <div id="updateNotification" class="update-notification"
+                    style="display: none; background: rgba(0, 243, 255, 0.1); border: 1px solid #00f3ff; border-radius: 8px; padding: 10px; margin: 10px; text-align: center; cursor: pointer;">
+                    <i class="fas fa-sync-alt fa-spin"
+                        style="color: #00f3ff; font-size: 1.2rem; margin-bottom: 5px;"></i>
+                    <p style="color: #fff; font-size: 0.8rem; margin: 0;">Nova Versão Disponível!</p>
+                    <span style="color: #aaa; font-size: 0.7rem;">Clique para atualizar</span>
+                </div>
+
+                <button class="nav-item active" data-view="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="chat">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span>Chat IA</span>
+                </button>
+                <button class="nav-item" data-view="articles">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <span>Conhecimento</span>
+                </button>
+                <button class="nav-item" data-view="neural">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M16.24 7.76l-2.12 2.12"></path>
+                        <path d="M7.76 16.24l2.12-2.12"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="6" r="3"></circle>
+                        <path d="M6 15v-3"></path>
+                        <path d="M18 9v3"></path>
+                        <circle cx="18" cy="18" r="3"></circle>
+                        <circle cx="6" cy="6" r="3"></circle>
+                        <path d="M16.24 16.24l-2.12-2.12"></path>
+                        <path d="M7.76 7.76l2.12 2.12"></path>
+                    </svg>
+                    <span>Rede Neural</span>
+                </button>
+                <button class="nav-item" data-view="hybrid">
+                    <i class="fas fa-microchip"></i>
+                    <span>Inteligência Híbrida</span>
+                </button>
+                <button class="nav-item" data-view="analytics">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Analytics BI</span>
+                </button>
+                <button class="nav-item admin-only" data-view="validation" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                    </svg>
+                    <span>Validação</span>
+                    <span class="badge" id="pendingCount" style="display: none;">0</span>
+                </button>
+                <button class="nav-item admin-only" data-view="admin" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span>Cadastro</span>
+                </button>
+
+            </nav>
+
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div class="view-container active" id="dashboardView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Dashboard Operacional</h2>
+                            <p>Visão geral do sistema e estatísticas de conhecimento</p>
+                        </div>
+                    </div>
+
+                    <div class="user-menu-header">
+                        <div class="user-profile-wrapper">
+                            <div class="user-info-box">
+                                <div class="user-details">
+                                    <div class="user-name">Usuário</div>
+                                    <div class="user-role">Convidado</div>
+                                    <div class="typo-counter" style="display: none;">
+                                        <span class="typo-label">INCOMPETÊNCIA:</span>
+                                        <span class="typo-value">0</span>
+                                    </div>
+                                </div>
+                                <button class="btn-icon-circle user-settings-button" title="Configurações de Usuário">
+                                    <i class="fa-solid fa-gear"></i>
+                                </button>
+                                <button class="btn-logout" onclick="handleLogout()" title="Sair">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Sair</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-asymmetric-layout">
+                    <!-- Main Action: Chat IA -->
+                    <div class="acid-card acid-action item-main" onclick="switchView('chat')"
+                        style="cursor: pointer; justify-content: center; align-items: center; text-align: center;">
+                        <i class="fas fa-robot floating-icon"
+                            style="font-size: 5rem; color: #a3ff00; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(163,255,0,0.4));"></i>
+                        <h3 class="acid-massive-text" style="font-size: 2.5rem; margin-bottom: 5px;">INICIAR_CHAT_IA
+                        </h3>
+                        <p
+                            style="color: #666; font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px;">
+                            Acesso ao Motor Neural</p>
+                        <div class="acid-glitch-overlay"></div>
+                    </div>
+
+                    <!-- Secondary Stat: Categorias (Compressed, Brutalist) -->
+                    <div class="acid-card acid-secondary item-side-1">
+                        <div class="acid-content-compact">
+                            <div class="acid-label-group-compact">
+                                <i class="fas fa-tags acid-icon-small"></i>
+                                <p>CATEGORIAS</p>
+                            </div>
+                            <h3 class="category-count-text acid-large-text">0</h3>
+                        </div>
+                        <div class="category-breakdown acid-breakdown" id="categoryBreakdown">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Stat: Conhecimentos (Compressed) -->
+                    <div class="acid-card acid-primary item-side-2">
+                        <div class="acid-content-compact">
+                            <div class="acid-label-group-compact">
+                                <i class="fas fa-book acid-icon-small"></i>
+                                <p>INDEXADOS</p>
+                            </div>
+                            <h3 class="article-count-text acid-large-text">0</h3>
+                        </div>
+                        <div class="acid-trend" style="position: absolute; right: 1rem; top: 1rem;">
+                            <i class="fas fa-arrow-up"></i> SYS
+                        </div>
+                    </div>
+
+                    <!-- AI Usage Stats Card (Full width bottom) -->
+                    <div class="acid-card full-width item-bottom">
+                        <div class="acid-card-header">
+                            <h3><i class="fas fa-microchip"></i> USO_DE_IA_E_LIMITES</h3>
+                            <button class="acid-btn-sync" onclick="checkStatus()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+
+                        <div class="usage-dashboard-layout">
+                            <!-- Left Col: Stats -->
+                            <div class="usage-stats-column">
+                                <h4 class="acid-subhead">CONSUMO_POR_PROVEDOR</h4>
+                                <div class="usage-stats-grid" id="aiUsageStats">
+                                    <div class="loading acid-loading">Carregando_Estatisticas...</div>
+                                </div>
+                            </div>
+
+                            <!-- Right Col: Chart -->
+                            <div class="usage-chart-column">
+                                <h4 class="acid-subhead">HISTORICO_[7_DIAS]</h4>
+                                <div class="chart-wrapper acid-chart-wrapper">
+                                    <canvas id="aiUsageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat View -->
+            <div class="view-container" id="chatView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Assistente IA</h2>
+                            <p>Faça perguntas sobre a base de conhecimento</p>
+                        </div>
+                    </div>
+
+
+                    <div class="user-menu-header">
+                        <!-- AI Status - Moved from Sidebar to Chat Header -->
+                        <div class="status-indicator header-status">
+                            <div class="status-dot" id="aiStatus"></div>
+                            <span id="aiStatusText">Verificando IA...</span>
+                        </div>
+
+                        <div class="user-profile-wrapper">
+                            <div class="user-info-box">
+                                <div class="user-details">
+                                    <div class="user-name">Usuário</div>
+                                    <div class="user-role">Convidado</div>
+                                    <div class="typo-counter" style="display: none;">
+                                        <span class="typo-label">INCOMPETÊNCIA:</span>
+                                        <span class="typo-value">0</span>
+                                    </div>
+                                </div>
+                                <button class="btn-icon-circle user-settings-button" title="Configurações de Usuário">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn-logout" onclick="handleLogout()" title="Sair">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Sair</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="welcome-message">
+                            <div class="welcome-icon">🤖</div>
+                            <h3>Olá! Como posso ajudar?</h3>
+                            <p>Faça perguntas sobre qualquer tópico da nossa base de conhecimento e receba respostas
+                                instantâneas.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <!-- Custom Premium AI Selector -->
+                            <div class="custom-dropdown" id="aiModelDropdown">
+                                <div class="dropdown-trigger" id="modelTrigger">
+                                    <span class="current-model-icon">🤖</span>
+                                    <span class="current-model-name">Auto</span>
+                                    <i class="fas fa-chevron-up"></i>
+                                </div>
+                                <div class="dropdown-menu" id="modelMenu">
+                                    <div class="dropdown-item active" data-value="auto" data-icon="🤖">
+                                        <div class="item-info">
+                                            <span class="item-name">🤖 Auto (Híbrido)</span>
+                                            <span class="item-desc">Equilíbrio inteligente</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item" data-value="groq" data-icon="⚡">
+                                        <div class="item-info">
+                                            <span class="item-name">⚡ Groq Llama 3</span>
+                                            <span class="item-desc">Velocidade extrema</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item" data-value="gemini" data-icon="🚨">
+                                        <div class="item-info">
+                                            <span class="item-name">🚨 Gemini 2.5</span>
+                                            <span class="item-desc">Precisão e Lógica</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item" data-value="mistral" data-icon="🛡️">
+                                        <div class="item-info">
+                                            <span class="item-name">🛡️ Mistral AI</span>
+                                            <span class="item-desc">Segurança e Foco</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item" data-value="offline" data-icon="📂">
+                                        <div class="item-info">
+                                            <span class="item-name">📂 Busca Manual (Offline)</span>
+                                            <span class="item-desc">Sem IA (Apenas Busca)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="modelSelectorValue" value="auto">
+                            </div>
+                            <input type="text" id="chatInput" placeholder="Digite sua pergunta aqui..."
+                                autocomplete="off">
+                            <button class="send-button" id="sendButton">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13" />
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="chat-disclaimer">
+                            A IA pode cometer erros. Por isso, é bom checar as respostas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Articles View -->
+            <div class="view-container" id="articlesView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Base de Conhecimento</h2>
+                            <p>Explore todos os conhecimentos disponíveis</p>
+                        </div>
+
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.35-4.35" />
+                                </svg>
+                                <input type="text" id="searchArticles" placeholder="Buscar conhecimento...">
+                            </div>
+                            <select id="categoryFilter" class="category-select">
+                                <option value="">Todas as categorias</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="articles-grid" id="articlesGrid">
+                    <div class="loading">Carregando conhecimento...</div>
+                </div>
+            </div>
+
+            <!-- Neural Network View -->
+            <div class="view-container" id="neuralView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Rede Neural <span class="badge-beta">BETA</span></h2>
+                            <p>Visualização em tempo real das conexões semânticas da IA</p>
+                        </div>
+
+                        <div class="header-actions">
+                            <button class="btn-secondary" onclick="simulateActivity()" style="font-size: 0.8rem;">
+                                <i class="fas fa-bolt"></i> Simular Pulso
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Neural HUD (Heads-Up Display) -->
+                <div class="neural-wrapper">
+                    <div id="networkContainer" class="network-container"></div>
+
+                    <div class="neural-hud">
+                        <div class="hud-section">
+                            <h4>CÓRTEX PRINCIPAL</h4>
+                            <div class="hud-stat">
+                                <span class="hud-label">MODELO LLM</span>
+                                <span class="hud-value active">Llama 3-70b (Groq)</span>
+                            </div>
+                            <div class="hud-stat">
+                                <span class="hud-label">LATÊNCIA MÉDIA</span>
+                                <span class="hud-value">~300ms</span>
+                            </div>
+                        </div>
+
+                        <div class="hud-section">
+                            <h4>MEMÓRIA VETORIAL</h4>
+                            <div class="hud-stat">
+                                <span class="hud-label">EMBEDDINGS</span>
+                                <span class="hud-value">MiniLM-L12-v2</span>
+                            </div>
+                            <div class="hud-stat">
+                                <span class="hud-label">DIMENSÕES</span>
+                                <span class="hud-value">384 vetores</span>
+                            </div>
+                            <div class="hud-stat">
+                                <span class="hud-label">NÓS INDEXADOS</span>
+                                <span class="hud-value" id="hudNodeCount">0</span>
+                            </div>
+                        </div>
+
+                        <div class="hud-section">
+                            <h4>STATUS DA REDE</h4>
+                            <div class="hud-status-indicator">
+                                <div class="hud-led online"></div>
+                                <span>SISTEMA ONLINE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hybrid Intelligence View -->
+            <div class="view-container" id="hybridView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Inteligência Híbrida</h2>
+                            <p>Motor de decisão neural para classificação de conhecimento</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hybrid-container"
+                    style="display: grid; grid-template-columns: 1fr 350px; gap: 20px; height: calc(100vh - 140px);">
+
+                    <!-- Left Column: Test & Override -->
+                    <div class="hybrid-main"
+                        style="display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 5px;">
+
+                        <!-- Test Section -->
+                        <div class="hybrid-card"
+                            style="background: #020202; border: 1px solid #a3ff00; border-radius: 0; padding: 20px; flex: 1;">
+                            <div class="card-header"
+                                style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <h3><i class="fas fa-terminal" style="color:#a3ff00;"></i> ÁREA DE TESTE & CLASSIFICAÇÃO
+                                </h3>
+                                <div class="mode-switch">
+                                    <button class="btn-sm active" id="btnTestMode" onclick="setHybridMode('test')"
+                                        style="background: #a3ff00; color: #020202; border: 1px solid #a3ff00; padding: 5px 10px; border-radius: 0; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer;">[
+                                        TESTE ]</button>
+                                    <button class="btn-sm" id="btnOverrideMode" onclick="setHybridMode('override')"
+                                        style="background: transparent; color: #a3ff00; border: 1px solid rgba(163,255,0,0.5); padding: 5px 10px; border-radius: 0; font-family: 'Courier New', monospace; cursor: pointer;">[
+                                        OVERRIDE ]</button>
+                                </div>
+                            </div>
+
+                            <textarea id="hybridInput" placeholder="> Aguardando entrada de dados neurais..."
+                                style="width: 100%; height: 150px; background: rgba(163, 255, 0, 0.05); border: 1px dashed rgba(163, 255, 0, 0.5); color: #fff; padding: 15px; border-radius: 0; resize: none; margin-bottom: 15px; font-family: 'Courier New', Courier, monospace; outline: none; transition: border 0.3s;"></textarea>
+
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button class="btn-primary" onclick="runHybridAnalysis()" id="btnRunAnalysis"
+                                    style="border-radius: 0; background: transparent; border: 1px solid #a3ff00; color: #a3ff00; font-family: 'Courier New', monospace; text-transform: uppercase;">
+                                    <i class="fas fa-bolt"></i> Iniciar Inferência
+                                </button>
+                            </div>
+
+                            <div id="inferenceResult" style="margin-top: 30px; display: none;">
+                                <h4
+                                    style="color: #a3ff00; margin-bottom: 15px; font-family: 'Courier New', Courier, monospace; font-weight: bold; border-bottom: 1px solid rgba(163,255,0,0.3); padding-bottom: 5px;">
+                                    > RESULTADO DA INFERÊNCIA</h4>
+
+                                <div class="prob-bar-container" style="margin-bottom: 15px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; margin-bottom: 5px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #fff;">
+                                        <span>Conceito (Concept)</span>
+                                        <span id="probConcept">0%</span>
+                                    </div>
+                                    <div class="prob-track"
+                                        style="height: 12px; background: transparent; border: 1px solid rgba(163,255,0,0.3); border-radius: 0;">
+                                        <div id="barConcept"
+                                            style="width: 0%; height: 100%; background: #a3ff00; transition: width 0.5s;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="prob-bar-container" style="margin-bottom: 15px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; margin-bottom: 5px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #fff;">
+                                        <span>Definição (Definition)</span>
+                                        <span id="probDefinition">0%</span>
+                                    </div>
+                                    <div class="prob-track"
+                                        style="height: 12px; background: transparent; border: 1px solid rgba(163,255,0,0.3); border-radius: 0;">
+                                        <div id="barDefinition"
+                                            style="width: 0%; height: 100%; background: #ffffff; transition: width 0.5s;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="prob-bar-container" style="margin-bottom: 15px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; margin-bottom: 5px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #fff;">
+                                        <span>Artigo Comum (Article)</span>
+                                        <span id="probArticle">0%</span>
+                                    </div>
+                                    <div class="prob-track"
+                                        style="height: 12px; background: transparent; border: 1px solid rgba(163,255,0,0.3); border-radius: 0;">
+                                        <div id="barArticle"
+                                            style="width: 0%; height: 100%; background: rgba(163, 255, 0, 0.4); transition: width 0.5s;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Radar Chart Container -->
+                                <div class="chart-container"
+                                    style="position: relative; height: 300px; width: 100%; margin-top: 20px; border: 1px dotted rgba(163,255,0,0.2); padding: 10px;">
+                                    <canvas id="hybridRadarChart"></canvas>
+                                </div>
+
+
+                                <div class="inference-meta"
+                                    style="margin-top: 20px; font-size: 0.9rem; font-family: 'Courier New', monospace; color: rgba(255,255,255,0.7); border-top: 1px dashed rgba(163,255,0,0.3); padding-top: 10px;">
+                                    <p>MODELO: <span id="metaModel" style="color: #a3ff00;">-</span></p>
+                                    <p>CONFIANÇA: <span id="metaConfidence" style="color: #fff;">-</span></p>
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                                        CAT:
+                                        <input type="text" id="metaSuggestedCategory"
+                                            style="background: transparent; border: 1px solid #a3ff00; color: #a3ff00; padding: 4px 8px; border-radius: 0; font-weight: bold; width: 200px; font-family: 'Courier New', monospace;"
+                                            placeholder="> Categoria...">
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                                        TAGS:
+                                        <input type="text" id="metaSuggestedTags"
+                                            style="background: transparent; border: 1px dotted rgba(163,255,0,0.5); color: #fff; padding: 4px 8px; border-radius: 0; width: 240px; font-family: 'Courier New', monospace; font-size: 0.8rem;"
+                                            placeholder="> tags, csv">
+                                    </div>
+                                    <p style="margin-top: 15px;">[DECISÃO DO MOTOR]: <strong id="metaDecision"
+                                            style="color: #fff; background: rgba(163,255,0,0.2); padding: 2px 6px;">-</strong>
+                                    </p>
+                                </div>
+
+                                <div id="overrideActions" style="margin-top: 20px; display: none;">
+                                    <button class="btn-success"
+                                        style="width: 100%; border-radius: 0; font-family: 'Courier New', monospace; font-weight: bold; background: #a3ff00; color: #020202; border: none; padding: 10px; cursor: pointer; text-transform: uppercase;"
+                                        onclick="applyHybridDecision()">
+                                        <i class="fas fa-check" style="margin-right: 5px;"></i> Injetar Nó na Rede
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Decision Log -->
+                    <div class="hybrid-sidebar"
+                        style="background: #020202; border: 1px dashed rgba(163,255,0,0.5); padding: 20px; overflow-y: auto;">
+                        <h4
+                            style="margin-bottom: 20px; color: #a3ff00; font-family: 'Courier New', monospace; font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; border-bottom: 1px solid rgba(163,255,0,0.3); padding-bottom: 5px;">
+                            > LOG DE
+                            DECISÃO</h4>
+                        <div id="decisionLog" style="display: flex; flex-direction: column; gap: 15px;">
+                            <div class="log-empty"
+                                style="text-align: center; color: rgba(163,255,0,0.4); padding: 20px; font-family: 'Courier New', monospace;">
+                                <i class="fas fa-history"
+                                    style="font-size: 20px; margin-bottom: 10px; display: block;"></i>
+                                [ SISTEMA OCIOSO ]
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div class="view-container" id="analyticsView">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>Analytics & Business Intelligence</h2>
+                            <p>Insights baseados em interações de usuários e conhecimento</p>
+                        </div>
+                    </div>
+                    <div class="header-actions" style="display: flex; gap: 10px;">
+                        <button class="btn-secondary" onclick="exportAnalyticsCSV()"
+                            style="background: transparent; border: 1px dotted rgba(163,255,0,0.5); color: #fff; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(163,255,0,0.1)'; this.style.borderColor='#a3ff00';"
+                            onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(163,255,0,0.5)';">
+                            <i class="fas fa-file-export" style="color: #a3ff00; margin-right: 5px;"></i> [ CSV ]
+                        </button>
+                        <button class="btn-secondary" onclick="copyPowerBILink()"
+                            style="background: transparent; border: 1px dashed rgba(163,255,0,0.5); color: #fff; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(163,255,0,0.1)'; this.style.borderColor='#a3ff00';"
+                            onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(163,255,0,0.5)';">
+                            <i class="fas fa-link" style="color: #a3ff00; margin-right: 5px;"></i> [ JSON FEED ]
+                        </button>
+                        <button class="btn-primary" onclick="generateInsights()"
+                            style="background: #a3ff00; border: 1px solid #a3ff00; color: #020202; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.boxShadow='3px 3px 0px rgba(163,255,0,0.3)'; this.style.transform='translate(-2px, -2px)';"
+                            onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                            <i class="fas fa-magic" style="margin-right: 5px;"></i> > INSIGHTS IA
+                        </button>
+                        <button class="btn-secondary" onclick="loadAnalyticsData()"
+                            style="background: transparent; border: 1px solid #a3ff00; color: #a3ff00; border-radius: 0; padding: 8px 15px; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='#a3ff00'; this.style.color='#020202';"
+                            onmouseout="this.style.background='transparent'; this.style.color='#a3ff00';"
+                            title="Atualizar Dados">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="analytics-dashboard">
+                    <!-- AI Insights Panel (New) -->
+                    <div class="analytics-card full-width" id="aiInsightsPanel"
+                        style="display: none; margin-bottom: 20px; border: 1px solid #a3ff00; border-radius: 0; background: transparent; position: relative;">
+                        <div class="analytics-card-header"
+                            style="background: transparent; border-bottom: 1px dashed rgba(163, 255, 0, 0.3);">
+                            <h3><i class="fas fa-terminal" style="color: #a3ff00;"></i> > INSIGHTS DA INTELIGÊNCIA
+                                ARTIFICIAL</h3>
+                        </div>
+                        <div class="analytics-card-content">
+                            <div id="aiInsightsContent" class="markdown-content"
+                                style="padding: 15px; color: #fff; font-size: 0.9rem;">
+                                <!-- AI Content will go here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interaction KPIs -->
+                    <div class="analytics-kpi-grid"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                        <div class="analytics-card kpi-card"
+                            style="border: 1px solid #a3ff00; background: transparent; border-radius: 0; flex-direction: row; align-items: center; justify-content: space-between; padding: 1.5rem;">
+                            <div class="kpi-icon"
+                                style="background: transparent; color: #a3ff00; font-size: 2rem; padding: 10px;">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="kpi-data" style="text-align: right; display: flex; flex-direction: column;">
+                                <span class="kpi-value" id="kpi-views"
+                                    style="color: #fff; font-size: 2rem; font-weight: bold;">0</span>
+                                <span class="kpi-label"
+                                    style="color: rgba(163,255,0,0.8); font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">[
+                                    VISUALIZAÇÕES ]</span>
+                            </div>
+                        </div>
+                        <div class="analytics-card kpi-card"
+                            style="border: 1px solid rgba(163,255,0,0.5); background: transparent; border-radius: 0; flex-direction: row; align-items: center; justify-content: space-between; padding: 1.5rem;">
+                            <div class="kpi-icon"
+                                style="background: transparent; color: #fff; font-size: 2rem; padding: 10px;">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                            <div class="kpi-data" style="text-align: right; display: flex; flex-direction: column;">
+                                <span class="kpi-value" id="kpi-likes"
+                                    style="color: #fff; font-size: 2rem; font-weight: bold;">0</span>
+                                <span class="kpi-label"
+                                    style="color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">[
+                                    ÚTEIS ]</span>
+                            </div>
+                        </div>
+                        <div class="analytics-card kpi-card"
+                            style="border: 1px dashed rgba(163,255,0,0.5); background: transparent; border-radius: 0; flex-direction: row; align-items: center; justify-content: space-between; padding: 1.5rem;">
+                            <div class="kpi-icon"
+                                style="background: transparent; color: rgba(163,255,0,0.5); font-size: 2rem; padding: 10px;">
+                                <i class="fas fa-thumbs-down"></i>
+                            </div>
+                            <div class="kpi-data" style="text-align: right; display: flex; flex-direction: column;">
+                                <span class="kpi-value" id="kpi-dislikes"
+                                    style="color: #fff; font-size: 2rem; font-weight: bold;">0</span>
+                                <span class="kpi-label"
+                                    style="color: rgba(163,255,0,0.5); font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">[
+                                    NÃO ÚTEIS ]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-grid">
+                        <!-- Top Searches Card -->
+                        <div class="analytics-card full-height">
+                            <div class="analytics-card-header">
+                                <h3><i class="fas fa-search"></i> Termos Mais Pesquisados</h3>
+                            </div>
+                            <div class="analytics-card-content">
+                                <div id="topSearchesList" class="analytics-list">
+                                    <div class="loading">Carregando termos...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Viewed/Liked Card -->
+                        <div class="analytics-card full-height">
+                            <div class="analytics-card-header">
+                                <h3><i class="fas fa-star"></i> Conteúdo em Destaque</h3>
+                            </div>
+                            <div class="analytics-card-content">
+                                <h4
+                                    style="font-size: 0.8rem; color: #888; margin: 10px 0 5px 0; text-transform: uppercase;">
+                                    Mais Visualizados</h4>
+                                <div id="topViewedList" class="analytics-list"
+                                    style="max-height: 150px; overflow-y: auto;">
+                                    <div class="loading">Carregando...</div>
+                                </div>
+
+                                <h4
+                                    style="font-size: 0.8rem; color: #888; margin: 15px 0 5px 0; text-transform: uppercase;">
+                                    Melhor Avaliados</h4>
+                                <div id="topLikedList" class="analytics-list"
+                                    style="max-height: 150px; overflow-y: auto;">
+                                    <div class="loading">Carregando...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search Trends Chart -->
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3><i class="fas fa-chart-line"></i> Tendência de Consultas</h3>
+                            </div>
+                            <div class="analytics-card-content">
+                                <div style="height: 300px; position: relative;">
+                                    <canvas id="searchTrendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category Distribution Chart -->
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3><i class="fas fa-chart-pie"></i> Distribuição de Conhecimento</h3>
+                            </div>
+                            <div class="analytics-card-content">
+                                <div style="height: 300px; position: relative;">
+                                    <canvas id="categoryDistChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Validação -->
+            <div id="validationView" class="view-container">
+                <div class="view-header">
+                    <div class="header-main-group">
+                        <div class="header-title">
+                            <h2>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M9 11l3 3L22 4" />
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                                </svg>
+                                Validação de Conhecimentos Pendentes
+                            </h2>
+                        </div>
+
+                        <div class="header-actions" style="display: flex; gap: 10px;">
+                            <button id="btnApproveAll" class="btn-success" onclick="approveAllArticles()"
+                                style="display: none; background: #a3ff00; color: #020202; border: 1px solid #a3ff00; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.boxShadow='3px 3px 0px rgba(163,255,0,0.3)'; this.style.transform='translate(-2px, -2px)';"
+                                onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" style="margin-right: 5px;">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                > [ APROVAR TUDO ]
+                            </button>
+                            <button id="btnRejectAll" class="btn-danger" onclick="rejectAllArticles()"
+                                style="display: none; background: transparent; color: #ff0055; border: 1px dashed #ff0055; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.background='rgba(255,0,85,0.1)';"
+                                onmouseout="this.style.background='transparent';">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" style="margin-right: 5px;">
+                                    <path d="M18 6L6 18M6 6l12 12"></path>
+                                </svg>
+                                > [ REJEITAR TUDO ]
+                            </button>
+                            <button class="btn-secondary" onclick="loadPendingArticles()"
+                                style="background: transparent; border: 1px dotted rgba(163,255,0,0.5); color: #fff; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.background='rgba(163,255,0,0.1)'; this.style.borderColor='#a3ff00';"
+                                onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(163,255,0,0.5)';">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" style="margin-right: 5px; color: #a3ff00;">
+                                    <path d="M23 4v6h-6"></path>
+                                    <path d="M1 20v-6h6"></path>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                                    </path>
+                                </svg>
+                                [ ATUALIZAR ]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pendingArticlesGrid" class="articles-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- View: Admin / Cadastro -->
+            <div id="adminView" class="view-container">
+                <div class="view-header">
+                    <div class="header-title">
+                        <h2>Painel Administrativo</h2>
+                        <p>Gerencie conhecimentos e categorias</p>
+                    </div>
+
+                    <div class="header-actions" style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" id="btn-import-word"
+                            style="background: transparent; border: 1px dotted rgba(163,255,0,0.5); color: #fff; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(163,255,0,0.1)'; this.style.borderColor='#a3ff00';"
+                            onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(163,255,0,0.5)';">
+                            <i class="fas fa-file-word" style="color: #a3ff00; margin-right: 5px;"></i> [ IMPORTAR WORD
+                            ]
+                        </button>
+                        <button class="btn btn-danger" id="btn-delete-all"
+                            style="background: transparent; color: #ff0055; border: 1px dashed #ff0055; font-family: 'Courier New', monospace; border-radius: 0; padding: 8px 15px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(255,0,85,0.1)';"
+                            onmouseout="this.style.background='transparent';">
+                            <i class="fas fa-trash-alt" style="margin-right: 5px;"></i> > [ LIMPAR TUDO ]
+                        </button>
+                    </div>
+                </div>
+
+                <style>
+                    /* Acid Brutalism overrides for Admin View */
+                    #adminView .admin-tabs {
+                        display: flex;
+                        gap: 10px;
+                        margin-bottom: 20px;
+                        border-bottom: 1px solid rgba(163, 255, 0, 0.3);
+                        padding-bottom: 10px;
+                    }
+
+                    #adminView .admin-tab {
+                        background: transparent;
+                        border: 1px dotted rgba(255, 255, 255, 0.3);
+                        color: #fff;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0;
+                        padding: 10px 20px;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .admin-tab.active {
+                        border: 1px solid #a3ff00;
+                        color: #a3ff00;
+                        font-weight: bold;
+                        box-shadow: 2px 2px 0px rgba(163, 255, 0, 0.3);
+                    }
+
+                    #adminView .form-card,
+                    #adminView .category-form {
+                        background: transparent;
+                        border: 1px dashed rgba(255, 255, 255, 0.2);
+                        border-radius: 0;
+                        padding: 20px;
+                        margin-bottom: 20px;
+                    }
+
+                    #adminView .form-group label {
+                        font-family: 'Courier New', monospace;
+                        color: #a3ff00;
+                        text-transform: uppercase;
+                        font-size: 0.9rem;
+                        margin-bottom: 8px;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                    }
+
+                    #adminView .form-group input,
+                    #adminView .form-group select,
+                    #adminView .form-group textarea {
+                        background: rgba(0, 0, 0, 0.5);
+                        border: 1px solid rgba(163, 255, 0, 0.3);
+                        color: #fff;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0;
+                        padding: 10px;
+                        transition: all 0.2s;
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+
+                    #adminView .form-group input:focus,
+                    #adminView .form-group select:focus,
+                    #adminView .form-group textarea:focus {
+                        border-color: #a3ff00;
+                        outline: none;
+                        box-shadow: 2px 2px 0px rgba(163, 255, 0, 0.2);
+                    }
+
+                    #adminView .editor-toolbar button {
+                        background: transparent;
+                        border: 1px dotted rgba(255, 255, 255, 0.5);
+                        color: #fff;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0;
+                        padding: 5px 10px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .editor-toolbar button:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                        border-color: #fff;
+                    }
+
+                    #adminView .form-actions {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: flex-end;
+                        margin-top: 15px;
+                    }
+
+                    #adminView .form-actions button,
+                    #adminView .category-form button[type="submit"] {
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0;
+                        padding: 10px 20px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView #cancelButton {
+                        background: transparent;
+                        border: 1px dashed rgba(255, 255, 255, 0.5);
+                        color: #fff;
+                    }
+
+                    #adminView #cancelButton:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+
+                    #adminView #btnSaveArticle,
+                    #adminView .btn-primary {
+                        background: #a3ff00;
+                        color: #000;
+                        border: 1px solid #a3ff00 !important;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0;
+                        padding: 10px 20px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView #btnSaveArticle:hover,
+                    #adminView .btn-primary:hover {
+                        box-shadow: 3px 3px 0px rgba(163, 255, 0, 0.3) !important;
+                        transform: translate(-2px, -2px) !important;
+                    }
+
+                    /* Category Item Brutalism */
+                    #adminView .category-item {
+                        background: transparent !important;
+                        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                        border-left: 4px solid #a3ff00 !important;
+                        border-radius: 0 !important;
+                        padding: 15px !important;
+                        margin-bottom: 10px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .category-item:hover {
+                        border-color: #a3ff00 !important;
+                        background: rgba(163, 255, 0, 0.05) !important;
+                    }
+
+                    #adminView .category-item h4 {
+                        font-family: 'Courier New', monospace;
+                        color: #fff;
+                        margin: 0 0 5px 0;
+                        font-size: 1.1rem;
+                        text-transform: uppercase;
+                    }
+
+                    #adminView .category-item p {
+                        font-family: 'Courier New', monospace;
+                        color: rgba(255, 255, 255, 0.7);
+                        margin: 0;
+                        font-size: 0.9rem;
+                    }
+
+                    #adminView .category-item .btn-secondary {
+                        background: transparent !important;
+                        border: 1px dotted rgba(255, 255, 255, 0.5) !important;
+                        color: #fff !important;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0 !important;
+                        padding: 5px 10px !important;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .category-item .btn-secondary:hover {
+                        border-color: #fff !important;
+                        background: rgba(255, 255, 255, 0.1) !important;
+                    }
+
+                    #adminView .category-item .btn-danger {
+                        background: transparent !important;
+                        border: 1px dashed #ff0055 !important;
+                        color: #ff0055 !important;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0 !important;
+                        padding: 5px 10px !important;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .category-item .btn-danger:hover {
+                        background: rgba(255, 0, 85, 0.1) !important;
+                    }
+
+                    /* Remove hover bg from tabs */
+                    #adminView .admin-tab:hover:not(.active) {
+                        background: rgba(255, 255, 255, 0.05);
+                        border-color: rgba(255, 255, 255, 0.6);
+                    }
+
+                    /* Dictionary & User Tabs Brutalism */
+                    #adminView .add-word-form {
+                        background: transparent !important;
+                        border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+                        border-radius: 0 !important;
+                    }
+
+                    #adminView .add-word-form input {
+                        background: rgba(0, 0, 0, 0.5) !important;
+                        border: 1px solid rgba(163, 255, 0, 0.3) !important;
+                        color: #fff !important;
+                        font-family: 'Courier New', monospace !important;
+                        border-radius: 0 !important;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .add-word-form input:focus {
+                        border-color: #a3ff00 !important;
+                        outline: none;
+                        box-shadow: 2px 2px 0px rgba(163, 255, 0, 0.2);
+                    }
+
+                    #adminView .add-word-form .btn-primary {
+                        background: transparent !important;
+                        border: 1px dotted rgba(163, 255, 0, 0.5) !important;
+                        color: #a3ff00 !important;
+                        font-family: 'Courier New', monospace;
+                        border-radius: 0 !important;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        transition: all 0.2s;
+                    }
+
+                    #adminView .add-word-form .btn-primary:hover {
+                        background: rgba(163, 255, 0, 0.1) !important;
+                        border-color: #a3ff00 !important;
+                    }
+
+                    #adminView .view-header h3 {
+                        font-family: 'Courier New', monospace;
+                        color: #a3ff00;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                    }
+
+                    #adminView .view-header p {
+                        font-family: 'Courier New', monospace;
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                </style>
+
+                <div class="admin-container">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="new-article">[ NOVO ARTIGO ]</button>
+                        <button class="admin-tab" data-tab="categories">[ CATEGORIAS ]</button>
+                        <button class="admin-tab" data-tab="users">[ USUÁRIOS ]</button>
+                        <button class="admin-tab" data-tab="dictionary">[ DICIONÁRIO ]</button>
+                    </div>
+
+                    <!-- New Article Tab -->
+                    <div class="admin-tab-content active" id="newArticleTab">
+                        <form id="articleForm" class="article-form">
+                            <input type="hidden" id="articleId">
+
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label for="articleTitle">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
+                                            </path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
+                                            </path>
+                                        </svg>
+                                        Título do Artigo
+                                    </label>
+                                    <input type="text" id="articleTitle" placeholder="Digite o título do artigo"
+                                        required>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="articleCategory">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path
+                                                    d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                                </path>
+                                            </svg>
+                                            Categoria
+                                        </label>
+                                        <div class="select-wrapper">
+                                            <select id="articleCategory" required>
+                                                <option value="">Selecione uma categoria</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="articleTags">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path
+                                                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z">
+                                                </path>
+                                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                            </svg>
+                                            Tags
+                                        </label>
+                                        <input type="text" id="articleTags"
+                                            placeholder="Ex: suporte, técnico, tutorial">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="articleContent">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                                            </path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            <polyline points="10 9 9 9 8 9"></polyline>
+                                        </svg>
+                                        Conteúdo
+                                    </label>
+                                    <div class="editor-toolbar"
+                                        style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+                                        <button type="button" class="btn-secondary" id="btnUploadImage"
+                                            style="padding: 5px 10px; font-size: 0.9rem;">
+                                            <i class="fas fa-image"></i> Inserir Imagem
+                                        </button>
+                                        <button type="button" class="btn-secondary" id="btnTogglePreview"
+                                            style="padding: 5px 10px; font-size: 0.9rem;">
+                                            <i class="fas fa-eye"></i> Visualizar
+                                        </button>
+                                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="editor-container" style="position: relative;">
+                                        <textarea id="articleContent" rows="15"
+                                            placeholder="Digite o conteúdo do artigo (Markdown suportado)..."
+                                            required></textarea>
+                                        <div id="articlePreview" class="markdown-preview"
+                                            style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1rem; overflow-y: auto; z-index: 10;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" id="cancelButton">Cancelar</button>
+                                <button type="submit" class="btn-success" id="btnSaveArticle">Salvar Artigo</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Categories Tab -->
+                    <div class="admin-tab-content" id="categoriesTab">
+                        <div class="categories-section">
+                            <form id="categoryForm" class="category-form">
+                                <input type="hidden" id="categoryId">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="categoryName">Nome da Categoria</label>
+                                        <input type="text" id="categoryName" placeholder="Ex: Tutoriais" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="categoryDescription">Descrição</label>
+                                        <input type="text" id="categoryDescription"
+                                            placeholder="Descrição da categoria">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-primary">Adicionar Categoria</button>
+                            </form>
+
+                            <div class="categories-list" id="categoriesList">
+                                <div class="loading">Carregando categorias...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dictionary Tab -->
+                    <div class="admin-tab-content" id="dictionaryTab">
+                        <div class="categories-section">
+                            <div class="view-header" style="margin-bottom: 20px;">
+                                <div>
+                                    <h3>Palavras Aprendidas</h3>
+                                    <p>Gerencie o vocabulário técnico que a IA aprendeu com você.</p>
+                                </div>
+                            </div>
+
+                            <div class="add-word-form"
+                                style="display: flex; gap: 10px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <input type="text" id="newLearnedWord" placeholder="Digite uma nova palavra..."
+                                    style="flex: 1; padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;">
+                                <button class="btn-primary" onclick="addLearnedWord()">Adicionar</button>
+                            </div>
+
+                            <div class="categories-list" id="learnedWordsList">
+                                <div class="loading">Carregando dicionário...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Tab -->
+                    <div class="admin-tab-content" id="usersTab">
+                        <div class="categories-section">
+                            <form id="userForm" class="category-form">
+                                <input type="hidden" id="userId">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="userUsername">E-mail / Usuário</label>
+                                        <input type="text" id="userUsername" placeholder="jose.augusto@email.com"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="userPassword">Senha</label>
+                                        <input type="password" id="userPassword" placeholder="Digite a senha" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="userRole">Permissão</label>
+                                        <select id="userRole" required>
+                                            <option value="user">Suporte (Leitura/Escrita)</option>
+                                            <option value="admin">Administrador (Limitado)</option>
+                                            <option value="super_admin">Super Admin (Total)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-primary">Criar Usuário</button>
+                            </form>
+
+                            <div class="categories-list" id="usersList">
+                                <div class="loading">Carregando usuários...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- Article Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"></h3>
+                <button class="modal-close" id="modalClose">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="article-meta" id="modalMeta"></div>
+                <div class="article-content" id="modalContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="duplicateArticleButton">Duplicar</button>
+                <button class="btn-secondary" id="editArticleButton">Editar</button>
+                <button class="btn-danger" id="deleteArticleButton">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Importar Word -->
+    <div id="modal-import" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="modal-import-title">Importar Documento Word</h2>
+                <span class="close">&times;</span>
+            </div>
+
+            <form id="form-import-word">
+                <div class="import-body">
+                    <div class="drop-zone" id="drop-zone">
+                        <input type="file" id="import-file" accept=".docx" class="file-input" hidden>
+                        <div class="drop-zone-content">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="drop-text">Arraste e solte seu arquivo aqui</p>
+                            <span class="or-text">ou</span>
+                            <button type="button" class="btn-browse">Escolher Arquivo</button>
+                            <p class="file-hint">Suporta apenas arquivos .docx</p>
+                        </div>
+
+                        <!-- File Preview (Hidden by default) -->
+                        <div class="file-preview" id="file-preview" style="display: none;">
+                            <div class="file-icon">
+                                <i class="fas fa-file-word"></i>
+                            </div>
+                            <div class="file-info">
+                                <span class="file-name" id="preview-filename">documento.docx</span>
+                                <span class="file-size" id="preview-filesize">0 KB</span>
+                            </div>
+                            <button type="button" class="btn-remove-file" id="btn-remove-file" title="Remover arquivo">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="import-category">Categoria de Destino</label>
+                        <div class="select-wrapper">
+                            <select id="import-category" required style="width: 100%;">
+                                <!-- Preenchido via JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar (Hidden by default) -->
+                    <div class="upload-progress-container" id="upload-progress"
+                        style="display: none; margin-top: 15px;">
+                        <div class="progress-info">
+                            <span id="progress-text">Importando...</span>
+                            <span id="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="padding-top: 10px;">
+                    <button type="submit" class="btn btn-primary btn-block" id="btn-start-import" disabled>
+                        <i class="fas fa-file-import"></i> Iniciar Importação
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PERSONAL SETTINGS MODAL -->
+    <div id="personalSettingsModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Configurações de Usuário</h3>
+                <span class="close" onclick="closePersonalSettings()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="oldPassword">Senha Atual</label>
+                        <input type="password" id="oldPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Nova Senha</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Confirmar Nova Senha</label>
+                        <input type="password" id="confirmNewPassword" required>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Alterar Senha</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="confirmationModal" class="confirm-modal-overlay">
+        <div class="confirm-modal">
+            <h3 id="confirmTitle">Confirmação</h3>
+            <p id="confirmMessage">Tem certeza?</p>
+            <div class="confirm-modal-actions">
+                <button id="btnConfirmCancel" class="btn-modal btn-modal-cancel">Cancelar</button>
+                <button id="btnConfirmOk" class="btn-modal btn-modal-confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/kb_script.js?v=40"></script>
+    <script src="static/js/neural_network.js?v=20260203_debug_v3"></script>
+    <script src="static/js/hybrid_intelligence.js?v=10"></script>
+    <script src="static/js/analytics.js?v=1"></script>
+</body>
+
+</html>

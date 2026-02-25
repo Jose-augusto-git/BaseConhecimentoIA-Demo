@@ -1,0 +1,157 @@
+/* Analytics BI Dashboard Styles - Acid Brutalist */
+
+.analytics-dashboard {
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease-out;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 1.5rem;
+}
+
+.analytics-card {
+    background: transparent;
+    border: 1px solid rgba(163, 255, 0, 0.3);
+    border-radius: 0;
+    padding: 1.5rem;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.analytics-card::before {
+    content: '[ SYS_DATA ]';
+    position: absolute;
+    top: -12px;
+    right: 15px;
+    background: #020202;
+    color: #a3ff00;
+    font-size: 0.75rem;
+    padding: 0 5px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.analytics-card:hover {
+    border-color: #a3ff00;
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0px rgba(163, 255, 0, 0.2);
+}
+
+.analytics-card:hover::before {
+    opacity: 1;
+}
+
+.analytics-card.full-height {
+    grid-row: span 2;
+}
+
+.analytics-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(163, 255, 0, 0.3);
+    padding-bottom: 0.75rem;
+}
+
+.analytics-card-header h3 {
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.analytics-card-header h3 i {
+    color: #a3ff00;
+}
+
+.analytics-card-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Analytics List */
+.analytics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.analytics-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    background: transparent;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.analytics-list-item:last-child {
+    border-bottom: none;
+}
+
+.analytics-list-item:hover {
+    background: rgba(163, 255, 0, 0.05);
+    border-left: 3px solid #a3ff00;
+    padding-left: 0.75rem;
+}
+
+.term-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.term-name {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.term-meta {
+    font-size: 0.75rem;
+    color: rgba(163, 255, 0, 0.6);
+}
+
+.term-count {
+    background: transparent;
+    color: #a3ff00;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border: 1px solid #a3ff00;
+}
+
+/* Scrollbar for analytics cards */
+.analytics-card-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.analytics-card-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.analytics-card-content::-webkit-scrollbar-thumb {
+    background: rgba(163, 255, 0, 0.2);
+    border-radius: 0;
+}
+
+@media (max-width: 900px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,10 @@
+Flask
+Flask-CORS
+SQLAlchemy
+google-generativeai
+sentence-transformers
+python-dotenv
+python-docx
+pyspellchecker
+groq
+psycopg2-binary

@@ -1,0 +1,122 @@
+/* ==================== MOBILE HAMBURGER MENU ==================== */
+
+/* O botão ☰ só aparece em telas menores (Mobile) */
+.mobile-menu-toggle {
+    display: none;
+    /* Desktop: Escondido */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    /* Lower than sidebar (1001) so sidebar covers it when open */
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(102, 126, 234, 0.2);
+    /* Primary color hint */
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+.mobile-menu-toggle svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* Overlay Escuro (Fundo quando o menu abre) */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    /* Atrás da sidebar (que será z-index 101+) */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ==================== MEDIA QUERIES (TABLET/MOBILE) ==================== */
+
+@media (max-width: 900px) {
+
+    /* 1. Mostrar o botão hambúrguer */
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 2. Sidebar vira Gaveta (Off-Canvas) */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px !important;
+        /* Forçar largura total */
+        z-index: 1001;
+        /* Acima de tudo */
+        transform: translateX(-100%);
+        /* Escondido p/ esquerda */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        background: #000;
+        /* Garantir fundo opaco */
+    }
+
+    /* 3. Classe para Abrir Sidebar */
+    .sidebar.mobile-open {
+        transform: translateX(0);
+        /* Desliza para dentro */
+    }
+
+    /* 4. Ajustar Elementos Internos da Sidebar */
+    .sidebar-header .subtitle,
+    .nav-item span,
+    .stats {
+        display: block !important;
+        /* Re-exibir textos que estavam escondidos */
+    }
+
+    .sidebar-header {
+        padding-top: 60px;
+        /* Espaço para não ficar embaixo do botão mobile se ele estiver dentro (opcional) */
+    }
+
+    .logo h1 {
+        font-size: 1.5rem;
+        /* Um pouco menor para mobile */
+    }
+
+    /* 5. Conteúdo Principal flui normalmente */
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+        /* Remove margem da sidebar */
+    }
+
+    /* 6. Header Actions (Chat Header, etc) */
+    .view-header {
+        padding-top: 40px;
+        /* Espaço para o botão hambúrguer não cobrir título */
+    }
+}

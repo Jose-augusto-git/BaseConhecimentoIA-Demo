@@ -1,0 +1,76 @@
+/* ==================== HEADER STATS ==================== */
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 1.5rem;
+}
+
+.header-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.header-stat-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.header-stat-item.status-indicator {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0;
+    /* Override sidebar rule */
+    padding: 6px 12px;
+}
+
+/* Bolinha do status */
+.header-stat-item .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0;
+    animation: pulse 2s infinite;
+}
+
+.header-stat-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.header-stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsividade para Header Stats */
+@media (max-width: 900px) {
+    .header-stats {
+        display: none;
+        /* Esconder no mobile para não poluir */
+    }
+}
+
+/* Diff Indicators */
+.diff-positive {
+    color: var(--success);
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.diff-negative {
+    color: var(--danger);
+    font-weight: bold;
+    margin-left: 2px;
+}

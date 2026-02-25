@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aj Corp.AI - Login</title>
+    <link rel="stylesheet" href="static/css/login_style.css">
+    <link rel="icon" href="static/img/logo-aba.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="split-container">
+        <!-- Lado Esquerdo: Vídeo Institucional -->
+        <div class="split-left">
+            <div class="video-overlay"></div>
+            <video autoplay loop muted playsinline id="bgVideo">
+                <source src="static/img/logo1.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos HTML5.
+            </video>
+        </div>
+
+        <!-- Lado Direito: Login -->
+        <div class="split-right">
+            <div class="login-box">
+                <div class="login-header">
+                    <h2>Bem-vindo</h2>
+                    <p>Faça login para acessar a base de conhecimento</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="username">Usuário</label>
+                        <input type="text" id="username" placeholder="Digite seu usuário" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Entrar</button>
+
+                    <div id="errorMessage" class="error-message"></div>
+                </form>
+
+                <div class="login-footer">
+                    <p>© 2026 Aj Corp. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/login_script.js"></script>
+</body>
+
+</html>
